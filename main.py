@@ -1,14 +1,38 @@
 import streamlit as st
+import requests
 
-# Title for the app
-st.title("Input and Display App")
+from azure.core.credentials import AzureKeyCredential
+from azure.ai.language.questionanswering import QuestionAnsweringClient
 
-# Text input field
-user_input = st.text_input("Enter something:")
+endpoint = "https://sofibot-lang-service.cognitiveservices.azure.com/"
+credential = AzureKeyCredential("eb18002e72554e339d86d333618d78b8")
+knowledge_base_project = "Fission-sales"
+deployment = "production"
 
-# Button to submit the input
-submit_button = st.button("Submit")
 
-# Display the input when the button is clicked
-if submit_button:
-    st.write("You entered:", user_input)
+def get_answer(question):
+    client = QuestionAnsweringClient(endpoint, credential)
+    with client:
+        output = client.get_answers(
+            question=question,
+            project_name=knowledge_base_project,
+            deployment_name=deployment
+        )
+        if output.answers:
+            return output.answers[0].answer
+        else:
+            return "Sorry, I couldn't find an answer for your question."
+
+def main():
+    st.title("Azure QnA Maker Chatbot")
+
+    user_query = st.text_input("Enter your question:")
+
+    if st.button("Ask"):
+        if user_query:
+            answer = get_answer(user_query)
+            st.text_area("Chatbot:", value=answer)
+
+if __name__ == "__main__":
+    main()
+
