@@ -1,63 +1,26 @@
-from fastapi import Depends, FastAPI
-import uvicorn
-from azure.core.credentials import AzureKeyCredential
-from azure.ai.language.questionanswering import QuestionAnsweringClient
-from pydantic import BaseModel
+import streamlit as st 
+import pandas as pd 
+import numpy as np
+import seaborn as sns 
 
-class Question(BaseModel):
-    question:str
+st.title("Sales KPI Dashboard with nice charts")
 
+st.markdown('## Key Metrics')
 
-class QuestionAnswering:
-    endpoint = "https://sofibot-lang-service.cognitiveservices.azure.com/"
-    credential = AzureKeyCredential("eb18002e72554e339d86d333618d78b8")
-    knowledge_base_project = "Fission-sales"
-    deployment = "production"
-    client = None
+col1, col2, col3 = st.columns(3)
+col1.metric(label = "SPDR S&P 500", value = '%.2f' %200.12 , delta = "-$1.25")
+col2.metric("FTEC", "$121.10", "0.46%")
+col3.metric("BTC", "$46,583.91", "+4.87%")
 
-    def __init__(self):
-        try:
-            self.client = QuestionAnsweringClient(self.endpoint, self.credential)
-        except Exception as ex:
-            print(f"Error while connecting to Azure: {ex}")
+st.markdown('## Detailed Charts')
 
-    def get_output(self, question):
-        try:
-            if self.client is None:
-                return "Error while connecting to Azure bot"
-            if type(question)!=str:
-                return "Enter a valid intput"
-            question = question.strip()
-            if len(question)==0:
-                return "enter a valid input"
-            output = self.client.get_answers(
-                question=question,
-                project_name=self.knowledge_base_project,
-                deployment_name=self.deployment
-            )
-            return output.as_dict()
-        except Exception as ex:
-            raise ValueError(f"Error getting accessing answer: {ex}")
-        raise ValueError("Error getting answer")
+chart1, chart2 = st.columns(2)
 
-app = FastAPI()
-qa_instance = QuestionAnswering()
-
-@app.post("/qa/")
-async def generate_response(question:Question):
-    prompt_items = []
-    output = qa_instance.get_output(question.question)
-    answer = output["answers"][0].get("answer", "")
-    if output["answers"][0]["questions"]:
-        prompts = output["answers"][0]["dialog"]["prompts"]
-        source = output["answers"][0]["metadata"].get("source")
-    else:
-        prompts = []
-        source = None
-    for each_prompt in prompts:
-        prompt_items.append(each_prompt.get('display_text'))
-    return {"answer": answer, "prompts":prompt_items, "source":source}
+chart_data = pd.DataFrame(
+    np.random.randn(20, 3),
+    columns=['a', 'b', 'c'])
 
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+
+chart1.bar_chart(chart_data)
+chart2.line_chart(chart_data)
