@@ -5,7 +5,6 @@ requests
 uvicorn
 gunicorn
 pandas 
-numpy 
-seaborn 
+numpy  
 fastapi
-logging
+
