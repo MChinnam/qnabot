@@ -10,3 +10,5 @@ seaborn
 fastapi
 logging
 QnA_Maker_code
+random
+time
