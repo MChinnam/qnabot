@@ -20,11 +20,11 @@ class QuestionAnswering:
     endpoint = "https://sofibot-lang-service.cognitiveservices.azure.com/"
 
     # azure credentials, please update credentials
-    credential = AzureKeyCredential("*****")
+    credential = AzureKeyCredential("eb18002e72554e339d86d333618d78b8")
+
 
     # project name
-    knowledge_base_project = "*****"
-
+    knowledge_base_project = "Fission-sales"
     # It's the default value
     deployment = "production"
 
