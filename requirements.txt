@@ -3,7 +3,8 @@ azure-core
 azure-ai-language-questionanswering
 requests
 uvicorn
-
+gunicorn
 pandas 
 numpy 
 seaborn 
+fastapi
