@@ -9,5 +9,4 @@ numpy
 seaborn 
 fastapi
 logging
-random
 time
