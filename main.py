@@ -1,38 +1,49 @@
 import streamlit as st
-import requests
+import random
+import time
+from QnA_Maker_code import QuestionAnswering
 
-from azure.core.credentials import AzureKeyCredential
-from azure.ai.language.questionanswering import QuestionAnsweringClient
+# Please install all the required libraries
+# run the following command in terminal to start streamlit UI: streamlit run streamlit_cleaned_code.py
 
-endpoint = "https://sofibot-lang-service.cognitiveservices.azure.com/"
-credential = AzureKeyCredential("eb18002e72554e339d86d333618d78b8")
-knowledge_base_project = "Fission-sales"
-deployment = "production"
+qa_client = QuestionAnswering()
 
 
-def get_answer(question):
-    client = QuestionAnsweringClient(endpoint, credential)
-    with client:
-        output = client.get_answers(
-            question=question,
-            project_name=knowledge_base_project,
-            deployment_name=deployment
-        )
-        if output.answers:
-            return output.answers[0].answer
-        else:
-            return "Sorry, I couldn't find an answer for your question."
+st.title("Fission Q&A bot")
 
-def main():
-    st.title("Azure QnA Maker Chatbot")
+# Initialize chat history
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-    user_query = st.text_input("Enter your question:")
+# Display chat messages from history on app rerun
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
-    if st.button("Ask"):
-        if user_query:
-            answer = get_answer(user_query)
-            st.text_area("Chatbot:", value=answer)
 
-if __name__ == "__main__":
-    main()
+default_message = "Hello, I am FissionLabs bot. Let me know how can I help you?"
+# st.markdown(default_message)
+st.session_state.messages.append({"role": "assistant", "content": default_message})
+# Accept user input
+if prompt := st.chat_input("What is up?"):
+    # print(prompt)
+    user_input = prompt
+    # Add user message to chat history
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    # Display user message in chat message container
+    # st.button("service")
 
+    with st.chat_message("user"):
+        # print(prompt)
+        st.markdown(prompt)
+
+    # Display assistant response in chat message container
+    with st.chat_message("assistant"):
+        message_placeholder = st.empty()
+        # print(message_placeholder.chat_message)
+        full_response = ""
+
+        assistant_response = qa_client.get_output(user_input)
+        full_response = assistant_response
+        message_placeholder.markdown(assistant_response)
+    st.session_state.messages.append({"role": "assistant", "content": full_response})
