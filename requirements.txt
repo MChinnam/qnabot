@@ -9,3 +9,4 @@ numpy
 seaborn 
 fastapi
 logging
+QnA_Maker_code
