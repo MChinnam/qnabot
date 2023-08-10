@@ -43,6 +43,15 @@ class QuestionAnswering:
 app = FastAPI()
 qa_instance = QuestionAnswering()
 
+@app.get("/")
+async def check_service():
+    """
+    Checking if service is up and running
+    :return:
+    """
+    return {"status": 200, "message": "Service is up and running"}
+
+
 @app.post("/qa/")
 async def generate_response(question:Question):
     prompt_items = []
