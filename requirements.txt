@@ -1,3 +1,4 @@
+
 streamlit 
 azure-core
 azure-ai-language-questionanswering
@@ -7,4 +8,16 @@ gunicorn
 pandas 
 numpy  
 fastapi
+
+json
+copy
+logging
+sys
+langchain
+copy
+ 
+azure
+
+
+pydantic 
 
