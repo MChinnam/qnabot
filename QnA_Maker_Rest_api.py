@@ -192,6 +192,6 @@ async def generate_response(question:Question):
     
     return output
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+#if __name__ == "__main__":
+#    uvicorn.run(app, host="0.0.0.0", port=8000)
     #print(qa_instance.api_call("kishore poreddy"))
