@@ -7,6 +7,6 @@ gunicorn
 pandas 
 numpy  
 langchain
-azure
+azure-mgmt-storage
 pydantic 
 fastapi
