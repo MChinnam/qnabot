@@ -7,12 +7,9 @@ uvicorn
 gunicorn
 pandas 
 numpy  
-fastapi
 copy
-logging
-sys
 langchain
 copy
 azure
 pydantic 
-
+fastapi
