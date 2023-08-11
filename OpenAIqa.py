@@ -16,12 +16,12 @@ from langchain.llms import OpenAI
 
 
 
-from __init__ import OPENAI_API_KEY, template,url
+from __init__ import template,url
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s :[%(levelname)s]: %(message)s")
 logging.StreamHandler(sys.stdout)
 
-
+OPENAI_API_KEY="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"
 
 # import nltk
 # import ssl
