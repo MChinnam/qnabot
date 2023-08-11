@@ -10,3 +10,4 @@ langchain
 azure-mgmt-storage
 pydantic 
 fastapi
+azure-ai-language-questionanswering
