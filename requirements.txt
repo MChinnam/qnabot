@@ -8,16 +8,11 @@ gunicorn
 pandas 
 numpy  
 fastapi
-
-json
 copy
 logging
 sys
 langchain
 copy
- 
 azure
-
-
 pydantic 
 
