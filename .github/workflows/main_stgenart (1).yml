@@ -39,6 +39,8 @@ jobs:
           path: |
             . 
             !venv/
+    env:  # Define environment variables here
+      HNSWLIB_NO_NATIVE: '1'
 
   deploy:
     runs-on: ubuntu-latest
