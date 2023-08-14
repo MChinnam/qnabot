@@ -16,7 +16,8 @@ from langchain.llms import OpenAI
 
 
 
-from __init__ import OPENAI_API_KEY, template,url
+from __init__ import  template,url
+OPENAI_API_KEY="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"
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s :[%(levelname)s]: %(message)s")
 logging.StreamHandler(sys.stdout)
@@ -44,6 +45,7 @@ class OpenAQuestionAnswering:
     all_documents = []
     embeddings = None
     chain = None
+    db=None
 
     def __init__(self, urls = []):
         """
@@ -51,8 +53,8 @@ class OpenAQuestionAnswering:
         :param urls:
         """
         try:
-            #self.OPENAI_API_KEY = OPENAI_API_KEY
-            #os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
+            self.OPENAI_API_KEY = OPENAI_API_KEY
+            os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
             self.urls = urls
             self.embeddings = OpenAIEmbeddings()
             self.prompt = PromptTemplate(template=template, input_variables=["context", "question"])
@@ -82,8 +84,13 @@ class OpenAQuestionAnswering:
         except Exception as ex:
             logging.error(f"Error while loading data: {ex}")
         return
-
-
+    
+    def load_chormadb(self):
+        try:
+            
+            self.db = Chroma.from_documents(self.all_documents,self.embeddings)
+        except Exception as ex:
+            logging.error(f"Error while loading chormadb: {ex}")
 
     def load_data(self):
         try:
@@ -91,12 +98,13 @@ class OpenAQuestionAnswering:
             if len(self.all_documents)==0:
                 logging.info(f"we don't have any documents to connect to openai")
                 return
-            db = Chroma.from_documents(self.all_documents,self.embeddings)
+            #db = Chroma.from_documents(self.all_documents,self.embeddings)
+            self.load_chormadb()
             chain_type_kwargs = {"prompt": self.prompt}
             self.chain = RetrievalQA.from_chain_type(
                 llm=ChatOpenAI(temperature=0),
                 chain_type="stuff",
-                retriever=db.as_retriever(),
+                retriever=self.db.as_retriever(),
                 chain_type_kwargs=chain_type_kwargs,
             )
             logging.info("Successfully loaded data to chromadb and connected to langchain")
@@ -124,10 +132,10 @@ class OpenAQuestionAnswering:
         return "Error while query OpenAI"
 
 
-# if __name__=='__main__':
-#     # for chromadb installation export HNSWLIB_NO_NATIVE=1
-#     openai_question_answer = OpenAQuestionAnswering(["https://www.fissionlabs.com/about-us"])
-#     openai_question_answer.load_data()
-#     print(openai_question_answer.query_data("Kishore Poreddy"))
+if __name__=='__main__':
+    # for chromadb installation export HNSWLIB_NO_NATIVE=1
+    openai_question_answer = OpenAQuestionAnswering(["https://www.fissionlabs.com/about-us"])
+    openai_question_answer.load_data()
+    print(openai_question_answer.query_data("Kishore Poreddy"))
 
 
