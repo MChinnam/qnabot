@@ -16,8 +16,8 @@ logging.StreamHandler(sys.stdout)
 class Question(BaseModel):
     question:str
 
-url=["http://fissionlabs.com/about-us",
-"http://fissionlabs.com/case-studies/iot-driven-fleet-management-platform"]
+# url=["http://fissionlabs.com/about-us",
+# "http://fissionlabs.com/case-studies/iot-driven-fleet-management-platform"]
 
 
 openai_question_answer = OpenAQuestionAnswering()
