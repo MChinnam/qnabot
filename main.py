@@ -20,7 +20,7 @@ url=["http://fissionlabs.com/about-us",
 "http://fissionlabs.com/case-studies/iot-driven-fleet-management-platform"]
 
 
-openai_question_answer = OpenAQuestionAnswering(urls=url)
+openai_question_answer = OpenAQuestionAnswering(url=url)
 openai_question_answer.load_data()
 
 
