@@ -1,7 +1,7 @@
 """
 loading configurations
 """
-OPENAI_API_KEY="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"
+#OPENAI_API_KEY="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"
 
 template = """Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
 
