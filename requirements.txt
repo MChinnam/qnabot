@@ -12,6 +12,6 @@ pydantic
 fastapi
 azure-ai-language-questionanswering
 chromadb
-hynswlib
+hnswlib
 openai
 selenium
