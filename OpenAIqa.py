@@ -17,7 +17,7 @@ from langchain.llms import OpenAI
 
 
 from __init__ import  template,url
-OPENAI_API_KEY="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"
+
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s :[%(levelname)s]: %(message)s")
 logging.StreamHandler(sys.stdout)
@@ -40,7 +40,7 @@ class OpenAQuestionAnswering:
     """
     OpenAI Question Answering
     """
-    OPENAI_API_KEY = None
+    OPENAI_API_KEY="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"
     url=[]
     all_documents = []
     embeddings = None
