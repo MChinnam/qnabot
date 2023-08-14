@@ -40,7 +40,7 @@ class OpenAQuestionAnswering:
     OpenAI Question Answering
     """
     OPENAI_API_KEY = None
-    url=[]
+    url=["https://www.fissionlabs.com/about-us"]
     all_documents = []
     embeddings = None
     chain = None
