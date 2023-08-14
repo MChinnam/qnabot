@@ -16,9 +16,8 @@ from langchain.llms import OpenAI
 
 
 
-from __init__ import  template,url
-
-
+from __init__ import OPENAI_API_KEY, template,url
+"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"
 logging.basicConfig(level=logging.INFO, format="%(asctime)s :[%(levelname)s]: %(message)s")
 logging.StreamHandler(sys.stdout)
 
@@ -40,7 +39,7 @@ class OpenAQuestionAnswering:
     """
     OpenAI Question Answering
     """
-    OPENAI_API_KEY="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"
+    OPENAI_API_KEY = None
     url=[]
     all_documents = []
     embeddings = None
@@ -132,10 +131,10 @@ class OpenAQuestionAnswering:
         return "Error while query OpenAI"
 
 
-# if __name__=='__main__':
-#     # for chromadb installation export HNSWLIB_NO_NATIVE=1
-#     openai_question_answer = OpenAQuestionAnswering(["https://www.fissionlabs.com/about-us"])
-#     openai_question_answer.load_data()
-#     print(openai_question_answer.query_data("Kishore Poreddy"))
+if __name__=='__main__':
+    # for chromadb installation export HNSWLIB_NO_NATIVE=1
+    openai_question_answer = OpenAQuestionAnswering(["https://www.fissionlabs.com/about-us"])
+    openai_question_answer.load_data()
+    print(openai_question_answer.query_data("Kishore Poreddy"))
 
 
