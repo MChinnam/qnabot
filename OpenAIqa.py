@@ -14,9 +14,9 @@ from langchain.chat_models import ChatOpenAI
 from langchain.llms import OpenAI
 
 
+OPENAI_API_KEY="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"
 
-
-from __init__ import OPENAI_API_KEY, template,url
+from __init__ import template,url
 "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"
 logging.basicConfig(level=logging.INFO, format="%(asctime)s :[%(levelname)s]: %(message)s")
 logging.StreamHandler(sys.stdout)
