@@ -14,7 +14,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.llms import OpenAI
 
 
-OPENAI_API_KEY="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"
+OPENAI_API_KEY="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"
 
 from __init__ import template,url
 "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"
@@ -40,7 +40,7 @@ class OpenAQuestionAnswering:
     OpenAI Question Answering
     """
     OPENAI_API_KEY = OPENAI_API_KEY
-    url=url
+    url=[]
     all_documents = []
     embeddings = None
     chain = None
@@ -95,7 +95,7 @@ class OpenAQuestionAnswering:
         try:
             self.load_urls()
             if len(self.all_documents)==0:
-                logging.info(f"we don't have any documents to connect to openai")
+                logging.info("we don't have any documents to connect to openai")
                 return
             #db = Chroma.from_documents(self.all_documents,self.embeddings)
             self.load_chormadb()
@@ -131,10 +131,10 @@ class OpenAQuestionAnswering:
         return "Error while query OpenAI"
 
 
-# if __name__=='__main__':
-#     # for chromadb installation export HNSWLIB_NO_NATIVE=1
-#     openai_question_answer = OpenAQuestionAnswering(["https://www.fissionlabs.com/about-us"])
-#     openai_question_answer.load_data()
-#     print(openai_question_answer.query_data("Kishore Poreddy"))
+if __name__=='__main__':
+    # for chromadb installation export HNSWLIB_NO_NATIVE=1
+    openai_question_answer = OpenAQuestionAnswering(["https://www.fissionlabs.com/about-us"])
+    openai_question_answer.load_data()
+    print(openai_question_answer.query_data("Kishore Poreddy"))
 
 
