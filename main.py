@@ -16,14 +16,8 @@ logging.StreamHandler(sys.stdout)
 class Question(BaseModel):
     question:str
 
-# url=["http://fissionlabs.com/about-us",
-# "http://fissionlabs.com/case-studies/iot-driven-fleet-management-platform"]
-
-
-openai_question_answer = OpenAQuestionAnswering()
+openai_question_answer = OpenAQuestionAnswering(["https://www.fissionlabs.com/about-us"])
 openai_question_answer.load_data()
-
-
 
 class QuestionAnswering:
     """
@@ -92,7 +86,7 @@ class QuestionAnswering:
 
                             # appending points wrt header wrt streamlit to make it better on UI
                             temp_answer = str(prompt.display_text).strip()
-                            if len(temp_answer) > 0:
+                            if temp_answer != "":
                                 ## If no prompt output don't append it to the final answer
                                 temp_json["prompts"].append(temp_answer)
                     all_answers.append(temp_json)
@@ -130,10 +124,7 @@ class QuestionAnswering:
 
     def api_call(self,question):
         resp=self.get_output(question)
-        if len(resp)!=0:
-            return resp
-        else: 
-            return openai_question_answer.query_data(question)
+        return resp if len(resp)!=0 else openai_question_answer.query_data(question)
 
 
 
@@ -152,19 +143,7 @@ async def check_service():
 @app.post("/qa/")
 async def generate_response(question:Question):
     prompt_items = []
-    output = qa_instance.api_call(question.question)
-    # answer = output["answers"][0].get("answer", "")
-    # if output["answers"][0]["questions"]:
-    #     prompts = output["answers"][0]["dialog"]["prompts"]
-    #     source = output["answers"][0]["metadata"].get("source")
-    # else:
-    #     prompts = []
-    #     source = None
-    # for each_prompt in prompts:
-    #     prompt_items.append(each_prompt.get('display_text'))
-    # return {"answer": answer, "prompts":prompt_items, "source":source}
-    
-    return output
+    return qa_instance.api_call(question.question)
 
 # if __name__ == "__main__":
 #     uvicorn.run(app, host="0.0.0.0", port=8000)
