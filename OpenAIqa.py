@@ -39,7 +39,7 @@ class OpenAQuestionAnswering:
     """
     OpenAI Question Answering
     """
-    OPENAI_API_KEY = None
+
     url=[]
     all_documents = []
     embeddings = None
