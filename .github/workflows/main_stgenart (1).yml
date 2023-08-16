@@ -28,8 +28,7 @@ jobs:
 
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
-     # - name: Set OpenAI API Key
-    #  run: echo "OPENAI_API_KEY=${{ secrets.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 }}" >> $GITHUB_ENV
+   
         
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v2
@@ -40,8 +39,7 @@ jobs:
             !venv/
         env:  # Define environment variables here
           HNSWLIB_NO_NATIVE: '1'
-        #  OPENAI_API_KEY: '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'
-
+       
   deploy:
     runs-on: ubuntu-latest
     needs: build
