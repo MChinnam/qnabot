@@ -26,8 +26,10 @@ def main():
     if openai_api_key:
         print("OpenAI API Key:", openai_api_key)
         # Now you can use the 'openai_api_key' variable to make API calls or perform other tasks
+        return openai_api_key
     else:
         print("OpenAI API Key is not set.")
+        return "Ken not loaded"
 
 
 app = FastAPI()
@@ -40,7 +42,7 @@ async def check_service():
     :return:
     """
     main()
-    return {"status": 200, "message": "Service is up and running"}
+    return {"status": 200, "message": "Service is up and running","KEY":main()}
 
 
 # if __name__ == "__main__":
