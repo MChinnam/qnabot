@@ -59,3 +59,4 @@ jobs:
           app-name: 'fissionlabs-AIchatbot'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          openai_api_key: ${{ secrets.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 }}
