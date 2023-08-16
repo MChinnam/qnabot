@@ -38,7 +38,7 @@ class OpenAQuestionAnswering:
     """
     OpenAI Question Answering
     """
-    OPENAI_API_KEY = "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"
+    #OPENAI_API_KEY = "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"
     url=[]
     all_documents = []
     embeddings = None
@@ -51,8 +51,8 @@ class OpenAQuestionAnswering:
         :param urls:
         """
         try:
-            self.OPENAI_API_KEY = OPENAI_API_KEY
-            os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
+            #self.OPENAI_API_KEY = OPENAI_API_KEY
+            #os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
             self.urls = urls
             self.embeddings = OpenAIEmbeddings()
             self.prompt = PromptTemplate(template=template, input_variables=["context", "question"])
