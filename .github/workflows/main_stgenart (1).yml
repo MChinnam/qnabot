@@ -31,6 +31,9 @@ jobs:
       - name: Set OpenAI API Key
         run: echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> $GITHUB_ENV
 
+      - name: Print Environment Variables  # Add this step to print environment variables
+        run: env
+
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v2
         with:
@@ -38,8 +41,6 @@ jobs:
           path: |
             . 
             !venv/
-        #env:
-        #  HNSWLIB_NO_NATIVE: '1'
 
   deploy:
     runs-on: ubuntu-latest
