@@ -37,9 +37,6 @@ logging.StreamHandler(sys.stdout)
 #nltk.download()
 
 
-print(os.environ)
-key=os.getenv('OPENAI_API_KEY')
-
 
 
 class OpenAQuestionAnswering:
@@ -52,7 +49,7 @@ class OpenAQuestionAnswering:
     embeddings = None
     chain = None
 
-    def __init__(self, urls = []):
+    def __init__(self, urls=None,key=None):
         """
         setting OpenAI environment variables
         :param urls:
