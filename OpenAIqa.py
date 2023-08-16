@@ -14,7 +14,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.llms import OpenAI
 
 
-#OPENAI_API_KEY="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"
+
 from __init__ import template,url
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s :[%(levelname)s]: %(message)s")
@@ -38,7 +38,7 @@ class OpenAQuestionAnswering:
     """
     OpenAI Question Answering
     """
-  #  OPENAI_API_KEY = "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"
+     
     url=[]
     all_documents = []
     embeddings = None
@@ -51,8 +51,7 @@ class OpenAQuestionAnswering:
         :param urls:
         """
         try:
-           # self.OPENAI_API_KEY = OPENAI_API_KEY
-          #  os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
+       
             self.urls = urls
             self.embeddings = OpenAIEmbeddings()
             self.prompt = PromptTemplate(template=template, input_variables=["context", "question"])
