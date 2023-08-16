@@ -18,6 +18,7 @@ from langchain.llms import OpenAI
 
 from __init__ import template
 
+
 logging.basicConfig(level=logging.INFO, format="%(asctime)s :[%(levelname)s]: %(message)s")
 logging.StreamHandler(sys.stdout)
 
@@ -35,24 +36,26 @@ logging.StreamHandler(sys.stdout)
 
 #nltk.download()
 
+key=os.environ["OPENAI_API_KEY"]
+
 class OpenAQuestionAnswering:
     """
     OpenAI Question Answering
     """
-    key = os.environ.get("OPENAI_API_KEY")
+    OPENAI_API_KEY = None
     url=[]
     all_documents = []
     embeddings = None
     chain = None
 
-    def __init__(self, urls = [],key=None):
+    def __init__(self, urls = []):
         """
         setting OpenAI environment variables
         :param urls:
         """
         try:
-            self.OPENAI_API_KEY = self.key
-            os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
+            self.OPENAI_API_KEY = key
+            os.environ["OPENAI_API_KEY"] = key
             self.urls = urls
             self.embeddings = OpenAIEmbeddings()
             self.prompt = PromptTemplate(template=template, input_variables=["context", "question"])
@@ -94,7 +97,7 @@ class OpenAQuestionAnswering:
             db = Chroma.from_documents(self.all_documents,self.embeddings)
             chain_type_kwargs = {"prompt": self.prompt}
             self.chain = RetrievalQA.from_chain_type(
-                llm=ChatOpenAI(temperature=0,openai_api_key=self.key),
+                llm=ChatOpenAI(temperature=0),
                 chain_type="stuff",
                 retriever=db.as_retriever(),
                 chain_type_kwargs=chain_type_kwargs,
@@ -102,7 +105,7 @@ class OpenAQuestionAnswering:
             logging.info("Successfully loaded data to chromadb and connected to langchain")
         except Exception as ex:
             logging.error(f"Error while loading documents to chromadb or connecting to OpenAI: {ex}")
-            
+
         return
 
     def query_data(self, query):
@@ -120,8 +123,7 @@ class OpenAQuestionAnswering:
         if self.all_documents==0:
             return "Not able to load document using langchain Selenium loader"
         if self.chain is None:
-            return "Not able to connect to OpenAI or failed to create chromdb",(f"api key{key}")
-            
+            return "Not able to connect to OpenAI or failed to create chromdb"
         response = self.chain.run(query)
         output = json.loads(response)
         if output.get('source_url',"N/A")=="N/A":
@@ -130,10 +132,10 @@ class OpenAQuestionAnswering:
         return output
 
 
-# if __name__=='__main__':
-#     # for chromadb installation export HNSWLIB_NO_NATIVE=1
-#     openai_question_answer = OpenAQuestionAnswering(["https://www.fissionlabs.com/about-us"])
-#     openai_question_answer.load_data()
-#     print(openai_question_answer.query_data("Kishore Poreddy"))
+if __name__=='__main__':
+    # for chromadb installation export HNSWLIB_NO_NATIVE=1
+    openai_question_answer = OpenAQuestionAnswering(["https://www.fissionlabs.com/about-us"])
+    openai_question_answer.load_data()
+    print(openai_question_answer.query_data("Kishore Poreddy"))
 
 
