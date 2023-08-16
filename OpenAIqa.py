@@ -51,6 +51,8 @@ class OpenAQuestionAnswering:
         :param urls:
         """
         try:
+            self.OPENAI_API_KEY = OPENAI_API_KEY
+            os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
             self.urls = urls
             self.embeddings = OpenAIEmbeddings()
             self.prompt = PromptTemplate(template=template, input_variables=["context", "question"])
