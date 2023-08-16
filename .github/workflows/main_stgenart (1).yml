@@ -38,8 +38,8 @@ jobs:
           path: |
             . 
             !venv/
-        env:
-          HNSWLIB_NO_NATIVE: '1'
+        #env:
+        #  HNSWLIB_NO_NATIVE: '1'
 
   deploy:
     runs-on: ubuntu-latest
