@@ -177,6 +177,6 @@ async def generate_response(question:Question):
     prompt_items = []
     return qa_instance.api_call(question.question)
 
-if __name__ == "__main__":
-   uvicorn.run(app, host="0.0.0.0", port=8000)
-#print(qa_instance.api_call("kishore poreddy"))
+# if __name__ == "__main__":
+#    uvicorn.run(app, host="0.0.0.0", port=8000)
+# #print(qa_instance.api_call("kishore poreddy"))
