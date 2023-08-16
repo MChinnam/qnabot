@@ -12,7 +12,7 @@ import os
 os.environ["HNSWLIB_NO_NATIVE"] = '1'
 logging.basicConfig(level=logging.INFO, format="%(asctime)s :[%(levelname)s]: %(message)s")
 logging.StreamHandler(sys.stdout)
-key=os.environ.get("OPENAI_API_KEY")
+
 
 class Question(BaseModel):
     question:str
@@ -47,7 +47,7 @@ url=["http://fissionlabs.com/about-us"]
 # "http://fissionlabs.com/e-book-whitepapers",
 # "http://fissionlabs.com/blog-posts/selecting-the-right-software-development-vendor-how-proof-of-concept-trials-can-help"]
 
-openai_question_answer = OpenAQuestionAnswering(urls=url,key=key)
+openai_question_answer = OpenAQuestionAnswering(urls=url)
 openai_question_answer.load_data()
 
 
