@@ -16,7 +16,7 @@ from langchain.llms import OpenAI
 
 #OPENAI_API_KEY="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"
 from __init__ import template,url
-"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"
+
 logging.basicConfig(level=logging.INFO, format="%(asctime)s :[%(levelname)s]: %(message)s")
 logging.StreamHandler(sys.stdout)
 
@@ -38,7 +38,7 @@ class OpenAQuestionAnswering:
     """
     OpenAI Question Answering
     """
-    OPENAI_API_KEY = "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"
+    OPENAI_API_KEY = "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"
     url=[]
     all_documents = []
     embeddings = None
