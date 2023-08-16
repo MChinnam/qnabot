@@ -51,9 +51,9 @@ k=(os.environ['OPENAI_API_KEY'])
 if k is None:
     #print(os.environ)
     print("Key not loaded")
-else: 
-    openai_question_answer = OpenAQuestionAnswering(urls=url)
-    openai_question_answer.load_data()
+ 
+openai_question_answer = OpenAQuestionAnswering(urls=url,key=k)
+openai_question_answer.load_data()
 
 
 
