@@ -39,7 +39,7 @@ class OpenAQuestionAnswering:
     """
     OpenAI Question Answering
     """
-
+    OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
     url=[]
     all_documents = []
     embeddings = None
