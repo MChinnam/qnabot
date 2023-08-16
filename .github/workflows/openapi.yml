@@ -1,0 +1,23 @@
+- name: Set up Python version
+  uses: actions/setup-python@v2
+  with:
+    python-version: '3.10'
+
+- name: Create and start virtual environment
+  run: |
+    python -m venv venv
+    source venv/bin/activate
+
+- name: Install dependencies
+  run: pip install -r requirements.txt
+
+- name: Set OpenAI API Key
+  run: echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> $GITHUB_ENV
+
+- name: Print Environment Variables
+  run: env
+
+- name: Run Python Script with Virtual Environment
+  run: |
+    source venv/bin/activate  # Activate the virtual environment again
+    python main.py
