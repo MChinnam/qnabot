@@ -13,7 +13,8 @@ os.environ["HNSWLIB_NO_NATIVE"] = '1'
 logging.basicConfig(level=logging.INFO, format="%(asctime)s :[%(levelname)s]: %(message)s")
 logging.StreamHandler(sys.stdout)
 
-
+print(os.environ)
+key=os.getenv('OPENAI_API_KEY')
 class Question(BaseModel):
     question:str
 
