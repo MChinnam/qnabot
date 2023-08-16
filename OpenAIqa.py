@@ -45,15 +45,16 @@ class OpenAQuestionAnswering:
     embeddings = None
     chain = None
 
-    def __init__(self, urls = []):
+    def __init__(self, urls = [],key=None):
         """
         setting OpenAI environment variables
         :param urls:
         """
         try:
-
+            self.OPENAI_API_KEY = self.key
+            os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
             self.urls = urls
-            self.embeddings = OpenAIEmbeddings(openai_api_key=self.key)
+            self.embeddings = OpenAIEmbeddings()
             self.prompt = PromptTemplate(template=template, input_variables=["context", "question"])
             logging.info("Successfully initialized OpenAI Key Environment variable")
         except Exception as ex:
@@ -101,7 +102,7 @@ class OpenAQuestionAnswering:
             logging.info("Successfully loaded data to chromadb and connected to langchain")
         except Exception as ex:
             logging.error(f"Error while loading documents to chromadb or connecting to OpenAI: {ex}")
-            logging.error(f"api key{key}")
+            
         return
 
     def query_data(self, query):
@@ -119,7 +120,8 @@ class OpenAQuestionAnswering:
         if self.all_documents==0:
             return "Not able to load document using langchain Selenium loader"
         if self.chain is None:
-            return "Not able to connect to OpenAI or failed to create chromdb"
+            return "Not able to connect to OpenAI or failed to create chromdb",(f"api key{key}")
+            
         response = self.chain.run(query)
         output = json.loads(response)
         if output.get('source_url',"N/A")=="N/A":
