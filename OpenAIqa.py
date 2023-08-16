@@ -54,8 +54,10 @@ class OpenAQuestionAnswering:
         setting OpenAI environment variables
         :param urls:
         """
+        if urls is None:
+            urls = []
         try:
-            self.OPENAI_API_KEY = key
+            #self.OPENAI_API_KEY = key
             os.environ["OPENAI_API_KEY"] = key
             self.urls = urls
             self.embeddings = OpenAIEmbeddings()
