@@ -39,7 +39,7 @@ class OpenAQuestionAnswering:
     """
     OpenAI Question Answering
     """
-
+    key = os.environ.get("OPENAI_API_KEY")
     url=[]
     all_documents = []
     embeddings = None
@@ -53,7 +53,7 @@ class OpenAQuestionAnswering:
         try:
 
             self.urls = urls
-            self.embeddings = OpenAIEmbeddings()
+            self.embeddings = OpenAIEmbeddings(openai_api_key=key)
             self.prompt = PromptTemplate(template=template, input_variables=["context", "question"])
             logging.info("Successfully initialized OpenAI Key Environment variable")
         except Exception as ex:
@@ -93,7 +93,7 @@ class OpenAQuestionAnswering:
             db = Chroma.from_documents(self.all_documents,self.embeddings)
             chain_type_kwargs = {"prompt": self.prompt}
             self.chain = RetrievalQA.from_chain_type(
-                llm=ChatOpenAI(temperature=0),
+                llm=ChatOpenAI(temperature=0,openai_api_key=key),
                 chain_type="stuff",
                 retriever=db.as_retriever(),
                 chain_type_kwargs=chain_type_kwargs,
@@ -101,6 +101,7 @@ class OpenAQuestionAnswering:
             logging.info("Successfully loaded data to chromadb and connected to langchain")
         except Exception as ex:
             logging.error(f"Error while loading documents to chromadb or connecting to OpenAI: {ex}")
+            logging.error(f"api key{key}")
         return
 
     def query_data(self, query):
