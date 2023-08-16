@@ -43,7 +43,7 @@ class OpenAQuestionAnswering:
     """
     OpenAI Question Answering
     """
-    OPENAI_API_KEY = None
+   # OPENAI_API_KEY = None
     url=[]
     all_documents = []
     embeddings = None
@@ -58,7 +58,7 @@ class OpenAQuestionAnswering:
             urls = []
         try:
             #self.OPENAI_API_KEY = key
-            os.environ["OPENAI_API_KEY"] = key
+            #os.environ["OPENAI_API_KEY"] = key
             self.urls = urls
             self.embeddings = OpenAIEmbeddings()
             self.prompt = PromptTemplate(template=template, input_variables=["context", "question"])
