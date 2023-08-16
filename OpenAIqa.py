@@ -53,7 +53,7 @@ class OpenAQuestionAnswering:
         try:
 
             self.urls = urls
-            self.embeddings = OpenAIEmbeddings(openai_api_key=key)
+            self.embeddings = OpenAIEmbeddings(openai_api_key=self.key)
             self.prompt = PromptTemplate(template=template, input_variables=["context", "question"])
             logging.info("Successfully initialized OpenAI Key Environment variable")
         except Exception as ex:
@@ -93,7 +93,7 @@ class OpenAQuestionAnswering:
             db = Chroma.from_documents(self.all_documents,self.embeddings)
             chain_type_kwargs = {"prompt": self.prompt}
             self.chain = RetrievalQA.from_chain_type(
-                llm=ChatOpenAI(temperature=0,openai_api_key=key),
+                llm=ChatOpenAI(temperature=0,openai_api_key=self.key),
                 chain_type="stuff",
                 retriever=db.as_retriever(),
                 chain_type_kwargs=chain_type_kwargs,
