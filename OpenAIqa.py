@@ -49,7 +49,7 @@ class OpenAQuestionAnswering:
     embeddings = None
     chain = None
 
-    def __init__(self, urls=None,key=None):
+    def __init__(self, urls=None):
         """
         setting OpenAI environment variables
         :param urls:
@@ -57,8 +57,6 @@ class OpenAQuestionAnswering:
         if urls is None:
             urls = []
         try:
-            #self.OPENAI_API_KEY = key
-            #os.environ["OPENAI_API_KEY"] = key
             self.urls = urls
             self.embeddings = OpenAIEmbeddings()
             self.prompt = PromptTemplate(template=template, input_variables=["context", "question"])
