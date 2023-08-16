@@ -26,10 +26,11 @@ def main():
     if openai_api_key:
         print("OpenAI API Key:", openai_api_key)
         # Now you can use the 'openai_api_key' variable to make API calls or perform other tasks
-        return openai_api_key
+        return openai_api_key and os.getenv("OPENAI_API_KEY")
+      
     else:
         print("OpenAI API Key is not set.")
-        return "Ken not loaded"
+        return "Key not loaded"
 
 
 app = FastAPI()
