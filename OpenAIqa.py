@@ -132,10 +132,10 @@ class OpenAQuestionAnswering:
         return output
 
 
-if __name__=='__main__':
-    # for chromadb installation export HNSWLIB_NO_NATIVE=1
-    openai_question_answer = OpenAQuestionAnswering(["https://www.fissionlabs.com/about-us"])
-    openai_question_answer.load_data()
-    print(openai_question_answer.query_data("Kishore Poreddy"))
+# if __name__=='__main__':
+#     # for chromadb installation export HNSWLIB_NO_NATIVE=1
+#     openai_question_answer = OpenAQuestionAnswering(["https://www.fissionlabs.com/about-us"])
+#     openai_question_answer.load_data()
+#     print(openai_question_answer.query_data("Kishore Poreddy"))
 
 
