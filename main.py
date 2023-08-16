@@ -48,8 +48,13 @@ url=["http://fissionlabs.com/about-us"]
 # "http://fissionlabs.com/blog-posts/selecting-the-right-software-development-vendor-how-proof-of-concept-trials-can-help"]
 
 k=(os.environ['OPENAI_API_KEY'])
-openai_question_answer = OpenAQuestionAnswering(urls=url,key=k)
-openai_question_answer.load_data()
+if k is None:
+    print(os.environ)
+    print(os.getenv('OPENAI_API_KEY'))
+else: 
+    openai_question_answer = OpenAQuestionAnswering(urls=url,key=k)
+    openai_question_answer.load_data()
+
 
 
 
@@ -171,7 +176,7 @@ async def check_service():
     Checking if service is up and running
     :return:
     """
-    return {"status": 200, "message": "Service is up and running","ENV":k}
+    return {"status": 200, "message": "Service is up and running"}
 
 
 @app.post("/qa/")
