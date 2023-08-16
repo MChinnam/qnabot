@@ -41,7 +41,7 @@ jobs:
             !venv/
     env:  # Define environment variables here
       HNSWLIB_NO_NATIVE: '1'
-   #   OPENAI_API_KEY: "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"
+      OPENAI_API_KEY: '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’
 
   deploy:
     runs-on: ubuntu-latest
