@@ -13,8 +13,7 @@ os.environ["HNSWLIB_NO_NATIVE"] = '1'
 logging.basicConfig(level=logging.INFO, format="%(asctime)s :[%(levelname)s]: %(message)s")
 logging.StreamHandler(sys.stdout)
 
-print(os.environ)
-key=os.getenv('OPENAI_API_KEY')
+
 class Question(BaseModel):
     question:str
 
@@ -48,7 +47,8 @@ url=["http://fissionlabs.com/about-us"]
 # "http://fissionlabs.com/e-book-whitepapers",
 # "http://fissionlabs.com/blog-posts/selecting-the-right-software-development-vendor-how-proof-of-concept-trials-can-help"]
 
-openai_question_answer = OpenAQuestionAnswering(urls=url)
+k=(os.environ['OPENAI_API_KEY'])
+openai_question_answer = OpenAQuestionAnswering(urls=url,key=k)
 openai_question_answer.load_data()
 
 
@@ -171,7 +171,7 @@ async def check_service():
     Checking if service is up and running
     :return:
     """
-    return {"status": 200, "message": "Service is up and running"}
+    return {"status": 200, "message": "Service is up and running","ENV":k}
 
 
 @app.post("/qa/")
