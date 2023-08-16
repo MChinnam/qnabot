@@ -36,7 +36,8 @@ logging.StreamHandler(sys.stdout)
 
 #nltk.download()
 
-key=os.environ["OPENAI_API_KEY"]
+
+key=os.getenv('OPENAI_API_KEY')
 
 class OpenAQuestionAnswering:
     """
