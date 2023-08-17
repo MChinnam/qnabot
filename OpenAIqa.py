@@ -57,6 +57,11 @@ class OpenAQuestionAnswering:
         if urls is None:
             urls = []
         try:
+            if key:
+                os.environ["OPENAI_API_KEY"] = key
+                logging.info("Successfully initialized OpenAI API Key environment variable")
+            else:
+                logging.warning("No API key provided. You should provide a valid API key.")
             os.environ["OPENAI_API_KEY"] = key
             self.urls = urls
             self.embeddings = OpenAIEmbeddings()
