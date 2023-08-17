@@ -47,12 +47,9 @@ url=["http://fissionlabs.com/about-us"]
 # "http://fissionlabs.com/blog-posts/selecting-the-right-software-development-vendor-how-proof-of-concept-trials-can-help"]
 
 
-k=(os.environ['OPENAI_API_KEY'])
-if k is None:
-    #print(os.environ)
-    print("Key not loaded")
+
  
-openai_question_answer = OpenAQuestionAnswering(urls=url,key=k)
+openai_question_answer = OpenAQuestionAnswering(urls=url)
 openai_question_answer.load_data()
 
 
