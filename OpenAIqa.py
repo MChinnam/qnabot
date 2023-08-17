@@ -12,44 +12,18 @@ from langchain.prompts import PromptTemplate
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.chat_models import ChatOpenAI
 from langchain.llms import OpenAI
-
-
-
-
-from __init__ import template
-
-
-logging.basicConfig(level=logging.INFO, format="%(asctime)s :[%(levelname)s]: %(message)s")
-logging.StreamHandler(sys.stdout)
-
-
-
-# import nltk
-# import ssl
-
-# try:
-#     _create_unverified_https_context = ssl._create_unverified_context
-# except AttributeError:
-#     pass
-# else:
-#     ssl._create_default_https_context = _create_unverified_https_context
-
-#nltk.download()
-
-
-
+from __init__ import template,url
 
 class OpenAQuestionAnswering:
-    """
-    OpenAI Question Answering
-    """
-   # OPENAI_API_KEY = None
+
     url=[]
     all_documents = []
     embeddings = None
     chain = None
-
+    key=os.environ["OPENAI_API_KEY"]
+    
     def __init__(self, urls=None):
+        
         """
         setting OpenAI environment variables
         :param urls:
@@ -57,13 +31,15 @@ class OpenAQuestionAnswering:
         if urls is None:
             urls = []
         try:
-            if os.environ["OPENAI_API_KEY"]:
+            
+            if self.key:
                 logging.info("Successfully initialized OpenAI API Key environment variable")
             else:
-                logging.warning("No API key provided. You should provide a valid API key.{os.environ["OPENAI_API_KEY"]}")
-            os.environ["OPENAI_API_KEY"] = key
+                logging.warning("No API key provided. You should provide a valid API key.: {self.key}")
+           
+            
             self.urls = urls
-            self.embeddings = OpenAIEmbeddings(openai_api_key=os.environ["OPENAI_API_KEY"])
+            self.embeddings = OpenAIEmbeddings(openai_api_key=self.key)
             self.prompt = PromptTemplate(template=template, input_variables=["context", "question"])
             logging.info("Successfully initialized OpenAI Key Environment variable")
         except Exception as ex:
@@ -103,7 +79,7 @@ class OpenAQuestionAnswering:
             db = Chroma.from_documents(self.all_documents,self.embeddings)
             chain_type_kwargs = {"prompt": self.prompt}
             self.chain = RetrievalQA.from_chain_type(
-                llm=ChatOpenAI(temperature=0,openai_api_key=os.environ["OPENAI_API_KEY"]),
+                llm=ChatOpenAI(temperature=0,openai_api_key=self.key),
                 chain_type="stuff",
                 retriever=db.as_retriever(),
                 chain_type_kwargs=chain_type_kwargs,
@@ -136,12 +112,8 @@ class OpenAQuestionAnswering:
             return "No answer found"
         #return output["Answer"]
         return output
-
-
 # if __name__=='__main__':
 #     # for chromadb installation export HNSWLIB_NO_NATIVE=1
 #     openai_question_answer = OpenAQuestionAnswering(["https://www.fissionlabs.com/about-us"])
 #     openai_question_answer.load_data()
 #     print(openai_question_answer.query_data("Kishore Poreddy"))
-
-
