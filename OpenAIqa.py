@@ -49,7 +49,7 @@ class OpenAQuestionAnswering:
     embeddings = None
     chain = None
 
-    def __init__(self, urls=None,key=None):
+    def __init__(self, urls=None):
         """
         setting OpenAI environment variables
         :param urls:
@@ -57,14 +57,13 @@ class OpenAQuestionAnswering:
         if urls is None:
             urls = []
         try:
-            if key:
-                os.environ["OPENAI_API_KEY"] = key
+            if os.environ["OPENAI_API_KEY"]:
                 logging.info("Successfully initialized OpenAI API Key environment variable")
             else:
-                logging.warning("No API key provided. You should provide a valid API key.")
+                logging.warning("No API key provided. You should provide a valid API key.{os.environ["OPENAI_API_KEY"]}")
             os.environ["OPENAI_API_KEY"] = key
             self.urls = urls
-            self.embeddings = OpenAIEmbeddings()
+            self.embeddings = OpenAIEmbeddings(openai_api_key=os.environ["OPENAI_API_KEY"])
             self.prompt = PromptTemplate(template=template, input_variables=["context", "question"])
             logging.info("Successfully initialized OpenAI Key Environment variable")
         except Exception as ex:
@@ -104,7 +103,7 @@ class OpenAQuestionAnswering:
             db = Chroma.from_documents(self.all_documents,self.embeddings)
             chain_type_kwargs = {"prompt": self.prompt}
             self.chain = RetrievalQA.from_chain_type(
-                llm=ChatOpenAI(temperature=0),
+                llm=ChatOpenAI(temperature=0,openai_api_key=os.environ["OPENAI_API_KEY"]),
                 chain_type="stuff",
                 retriever=db.as_retriever(),
                 chain_type_kwargs=chain_type_kwargs,
