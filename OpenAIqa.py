@@ -12,7 +12,14 @@ from langchain.prompts import PromptTemplate
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.chat_models import ChatOpenAI
 from langchain.llms import OpenAI
+
+
+
 from __init__ import template,url
+logging.basicConfig(level=logging.INFO, format="%(asctime)s :[%(levelname)s]: %(message)s")
+logging.StreamHandler(sys.stdout)
+
+
 
 class OpenAQuestionAnswering:
 
@@ -45,7 +52,6 @@ class OpenAQuestionAnswering:
         except Exception as ex:
             logging.error(f"Error while setting OpenAI Key Environment variable: {ex}")
         return
-
     def load_urls(self):
         try:
             if len(self.urls) == 0:
@@ -67,8 +73,13 @@ class OpenAQuestionAnswering:
         except Exception as ex:
             logging.error(f"Error while loading data: {ex}")
         return
-
-
+    
+    def load_chormadb(self):
+        try:
+            
+            self.db = Chroma.from_documents(self.all_documents,self.embeddings)
+        except Exception as ex:
+            logging.error(f"Error while loading chormadb: {ex}")
 
     def load_data(self):
         try:
@@ -76,44 +87,44 @@ class OpenAQuestionAnswering:
             if len(self.all_documents)==0:
                 logging.info("we don't have any documents to connect to openai")
                 return
-            db = Chroma.from_documents(self.all_documents,self.embeddings)
+            #db = Chroma.from_documents(self.all_documents,self.embeddings)
+            self.load_chormadb()
             chain_type_kwargs = {"prompt": self.prompt}
             self.chain = RetrievalQA.from_chain_type(
                 llm=ChatOpenAI(temperature=0,openai_api_key=self.key),
                 chain_type="stuff",
-                retriever=db.as_retriever(),
+                retriever=self.db.as_retriever(),
                 chain_type_kwargs=chain_type_kwargs,
             )
             logging.info("Successfully loaded data to chromadb and connected to langchain")
         except Exception as ex:
             logging.error(f"Error while loading documents to chromadb or connecting to OpenAI: {ex}")
-
         return
 
     def query_data(self, query):
         defauult_output={}
         try:
-            return self._extracted_from_query_data_4(query)
+            if self.urls==0:
+                return "No urls exists"
+            if self.all_documents==0:
+                return "Not able to load document using langchain Selenium loader"
+            if self.chain is None:
+                return "Not able to connect to OpenAI or failed to create chromdb"
+            response = self.chain.run(query)
+            output = json.loads(response)
+            if output.get('source_url',"N/A")=="N/A":
+                return "No answer found"
+            #return output["Answer"]
+            return output
         except Exception as ex:
             logging.error(f"Error while querying the data: {ex}")
         return "Error while query OpenAI"
 
-    # TODO Rename this here and in `query_data`
-    def _extracted_from_query_data_4(self, query):
-        if self.urls==0:
-            return "No urls exists"
-        if self.all_documents==0:
-            return "Not able to load document using langchain Selenium loader"
-        if self.chain is None:
-            return f"Not able to connect to OpenAI or failed to create chromdb {self.key}"
-        response = self.chain.run(query)
-        output = json.loads(response)
-        if output.get('source_url',"N/A")=="N/A":
-            return "No answer found"
-        #return output["Answer"]
-        return output
+
 # if __name__=='__main__':
 #     # for chromadb installation export HNSWLIB_NO_NATIVE=1
 #     openai_question_answer = OpenAQuestionAnswering(["https://www.fissionlabs.com/about-us"])
 #     openai_question_answer.load_data()
 #     print(openai_question_answer.query_data("Kishore Poreddy"))
+
+
