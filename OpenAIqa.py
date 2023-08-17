@@ -105,7 +105,7 @@ class OpenAQuestionAnswering:
         if self.all_documents==0:
             return "Not able to load document using langchain Selenium loader"
         if self.chain is None:
-            return "Not able to connect to OpenAI or failed to create chromdb"
+            return f"Not able to connect to OpenAI or failed to create chromdb {self.key}"
         response = self.chain.run(query)
         output = json.loads(response)
         if output.get('source_url',"N/A")=="N/A":
