@@ -13,13 +13,26 @@ from langchain.embeddings import OpenAIEmbeddings
 from langchain.chat_models import ChatOpenAI
 from langchain.llms import OpenAI
 
+from datetime import datetime
 
-
-from __init__ import template,url
+from __init__ import template,url,default_json
 logging.basicConfig(level=logging.INFO, format="%(asctime)s :[%(levelname)s]: %(message)s")
 logging.StreamHandler(sys.stdout)
 
 
+
+
+
+default_json = {
+    "status": 200,
+    "Message": 'success',
+    "sessionId": 123,
+    "question": "N/A",
+    "answer": "N/A",
+    "prompts": [],
+    "source_url": "N/A",
+    "source": "OpenAI",
+}
 
 class OpenAQuestionAnswering:
 
@@ -28,7 +41,6 @@ class OpenAQuestionAnswering:
     embeddings = None
     chain = None
     key=os.environ["OPENAI_API_KEY"]
-    
     def __init__(self, urls=None):
         
         """
@@ -51,7 +63,11 @@ class OpenAQuestionAnswering:
             logging.info("Successfully initialized OpenAI Key Environment variable")
         except Exception as ex:
             logging.error(f"Error while setting OpenAI Key Environment variable: {ex}")
-        return
+            default_json['status']=400
+            default_json["Message"]=f"Error while setting OpenAI Key Environment variable: {ex}"
+            
+        return 
+    
     def load_urls(self):
         try:
             if len(self.urls) == 0:
@@ -72,7 +88,9 @@ class OpenAQuestionAnswering:
             logging.info(f"Successfully data: {len(self.all_documents)}")
         except Exception as ex:
             logging.error(f"Error while loading data: {ex}")
-        return
+            default_json['status']=400
+            default_json["Message"]=f"Error while loading data: {ex}"
+        return 
     
     def load_chormadb(self):
         try:
@@ -80,9 +98,13 @@ class OpenAQuestionAnswering:
             self.db = Chroma.from_documents(self.all_documents,self.embeddings)
         except Exception as ex:
             logging.error(f"Error while loading chormadb: {ex}")
+            default_json['status']=400
+            default_json["Message"]=f"Error while loading chormadb: {ex}"
+            return
 
     def load_data(self):
         try:
+
             self.load_urls()
             if len(self.all_documents)==0:
                 logging.info("we don't have any documents to connect to openai")
@@ -99,6 +121,9 @@ class OpenAQuestionAnswering:
             logging.info("Successfully loaded data to chromadb and connected to langchain")
         except Exception as ex:
             logging.error(f"Error while loading documents to chromadb or connecting to OpenAI: {ex}")
+            default_json['status']=400
+            default_json["Message"]=f"Error while loading documents to chromadb or connecting to OpenAI: {ex}"
+            
         return
 
     def query_data(self, query):
@@ -108,18 +133,31 @@ class OpenAQuestionAnswering:
                 return "No urls exists"
             if self.all_documents==0:
                 return "Not able to load document using langchain Selenium loader"
+            if self.load_chormadb is None:
+                return "ChromaDB load failure"
             if self.chain is None:
-                return "Not able to connect to OpenAI or failed to create chromdb"
+                default_json['status']=400
+                default_json["Message"]=f"Error while loading documents to chromadb or connecting to OpenAI: {ex}"
+                return default_json
             response = self.chain.run(query)
             output = json.loads(response)
             if output.get('source_url',"N/A")=="N/A":
                 return "No answer found"
             #return output["Answer"]
-            return output
+            default_json['answer']=output['answer']
+            default_json['source_url']=output['source_url']
+            default_json['question']=query
+            default_json['timestamp']=datetime.now().strftime("%m/%d/%YT%H:%M:%S.%f")
+            return default_json
+        
         except Exception as ex:
             logging.error(f"Error while querying the data: {ex}")
-        return "Error while query OpenAI"
+            
+        return default_json
+    
 
+    
+    
 
 # if __name__=='__main__':
 #     # for chromadb installation export HNSWLIB_NO_NATIVE=1
@@ -128,3 +166,6 @@ class OpenAQuestionAnswering:
 #     print(openai_question_answer.query_data("Kishore Poreddy"))
 
 
+# openai_question_answer = OpenAQuestionAnswering(["https://www.fissionlabs.com/about-us"])
+# openai_question_answer.load_data()
+# print((openai_question_answer.query_data("Kishore Poreddy")['answer']))
