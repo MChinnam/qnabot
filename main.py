@@ -12,6 +12,7 @@ import os
 os.environ["HNSWLIB_NO_NATIVE"] = '1'
 logging.basicConfig(level=logging.INFO, format="%(asctime)s :[%(levelname)s]: %(message)s")
 logging.StreamHandler(sys.stdout)
+from __init__ import default_json
 
 class Question(BaseModel):
     question:str
@@ -47,8 +48,6 @@ url=["http://fissionlabs.com/about-us"]
 # "http://fissionlabs.com/blog-posts/selecting-the-right-software-development-vendor-how-proof-of-concept-trials-can-help"]
 
 
-
- 
 openai_question_answer = OpenAQuestionAnswering(urls=url)
 openai_question_answer.load_data()
 
@@ -71,7 +70,7 @@ class QuestionAnswering:
     knowledge_base_project = "Fission-sales"
 
     # It's the default value
-    deployment = "production"
+    deployment = "productionii"
 
     # It would be updated once we connect to Azure QnAmaker API
     client = None
@@ -97,8 +96,9 @@ class QuestionAnswering:
         :param output:
         :return:
         """
+        
         all_answers = []
-        default_json = {"answer": "N/A", "prompts": [], "confidence":0.0, "source":"N/A", "source_url":"N/A"}
+        
         try:
             # if you want only the one with max confidence when there are multiple answers
             # max_confidence = self.confidence
@@ -106,11 +106,14 @@ class QuestionAnswering:
                 if answer.confidence>=self.confidence:
                     #creating a copy so they aren't using same variable
                     temp_json = copy.deepcopy(default_json)
-
+                    temp_json['status']=200
+                    temp_json['Message']="success"
                     temp_json["answer"] = str(answer.answer).strip()
                     temp_json["confidence"] = answer.confidence
-                    temp_json["source"] = answer.metadata.get("source","N/A")
+                    #temp_json["source"] = answer.metadata.get("source","N/A")
+                    
                     temp_json["source_url"] = answer.metadata.get("source_url", "N/A")
+                    
                     if temp_json["source_url"]!="N/A":
                         temp_json["source_url"] = temp_json["source_url"].replace("_com",".com").replace("@","/")
                     # Checking if you have any prompts
@@ -129,6 +132,8 @@ class QuestionAnswering:
             return all_answers
         except Exception as ex:
             logging.error(f"Error while extracting output: {ex}")
+            temp_json['status']=400
+            temp_json['Message']=f"Error while extracting output: {ex}"
         return all_answers
 
     def get_output(self, question):
@@ -150,12 +155,17 @@ class QuestionAnswering:
                 project_name=self.knowledge_base_project,
                 deployment_name=self.deployment
             )
+            
             logging.info("Successfully retrieved output from azure environment")
             if len(self.extract_output(output))>0:
                 return self.extract_output(output)[0]
         except Exception as ex:
             logging.error(f"Error getting accessing answer: {ex}")
+            default_json['status']=400
+            default_json['Message']=f"Error getting accessing answer: {ex}"
         return {}
+    
+        
 
 
     def api_call(self,question):
@@ -164,8 +174,15 @@ class QuestionAnswering:
 
 
 
+
 app = FastAPI()
 qa_instance = QuestionAnswering()
+
+#respp=qa_instance.api_call(question="service")
+
+from datetime import datetime
+#qa_instance.api_call(question="services")
+
 
 @app.get("/")
 async def check_service():
@@ -176,10 +193,26 @@ async def check_service():
     return {"status": 200, "message": "Service is up and running"}
 
 
+
 @app.post("/qa/")
 async def generate_response(question:Question):
-    prompt_items = []
-    return qa_instance.api_call(question.question)
+#     prompt_items = []
+#     # respp=qa_instance.api_call(question.question)
+#     # respp['question']=question.question
+#     # respp['timestamp']=datetime.now().strftime("%m/%d/%YT%H:%M:%S.%f")
+    
+#     # return respp
+    resp=qa_instance.get_output(question.question)
+    if len(resp)!=0:
+        resp['question']=question.question
+        resp['timestamp']=datetime.now().strftime("%m/%d/%YT%H:%M:%S.%f")
+        return resp
+    else:
+        return openai_question_answer.query_data(question.question)
+
+        
+        
+
 
 # if __name__ == "__main__":
 #     uvicorn.run(app, host="0.0.0.0", port=8000)
