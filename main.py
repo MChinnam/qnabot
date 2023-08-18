@@ -12,7 +12,7 @@ import os
 os.environ["HNSWLIB_NO_NATIVE"] = '1'
 logging.basicConfig(level=logging.INFO, format="%(asctime)s :[%(levelname)s]: %(message)s")
 logging.StreamHandler(sys.stdout)
-#from __init__ import default_json
+
 
 default_json = {
     "status": 400,
