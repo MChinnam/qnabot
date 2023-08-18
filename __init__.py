@@ -10,7 +10,17 @@ template = """Use the following pieces of context to answer the question at the 
 Question: {question}
 
 Please the provide the following in json JSON format with following keys answer and source_url."""
-
+default_json = {
+    "status": 400,
+    "Message": 'success',
+    "sessionId": 123,
+    "question": "N/A",
+    "answer": "N/A",
+    "prompts": [],
+    "confidence": 0.0,
+    "source_url": "N/A",
+    "source": "QnA",
+}
 url=["http://fissionlabs.com/about-us"]
 # "http://fissionlabs.com/how-we-work",
 # "http://fissionlabs.com/public-relations-csr",
