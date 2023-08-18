@@ -15,13 +15,9 @@ from langchain.llms import OpenAI
 
 from datetime import datetime
 
-from __init__ import template,url,default_json
+from __init__ import template
 logging.basicConfig(level=logging.INFO, format="%(asctime)s :[%(levelname)s]: %(message)s")
 logging.StreamHandler(sys.stdout)
-
-
-
-
 
 default_json = {
     "status": 200,
