@@ -12,8 +12,19 @@ import os
 os.environ["HNSWLIB_NO_NATIVE"] = '1'
 logging.basicConfig(level=logging.INFO, format="%(asctime)s :[%(levelname)s]: %(message)s")
 logging.StreamHandler(sys.stdout)
-from __init__ import default_json
+#from __init__ import default_json
 
+default_json = {
+    "status": 400,
+    "Message": 'success',
+    "sessionId": 123,
+    "question": "N/A",
+    "answer": "N/A",
+    "prompts": [],
+    "confidence": 0.0,
+    "source_url": "N/A",
+    "source": "QnA",
+}
 class Question(BaseModel):
     question:str
     
@@ -51,7 +62,17 @@ url=["http://fissionlabs.com/about-us"]
 openai_question_answer = OpenAQuestionAnswering(urls=url)
 openai_question_answer.load_data()
 
-
+default_json = {
+    "status": 400,
+    "Message": 'success',
+    "sessionId": 123,
+    "question": "N/A",
+    "answer": "N/A",
+    "prompts": [],
+    "confidence": 0.0,
+    "source_url": "N/A",
+    "source": "QnA",
+}
 
 class QuestionAnswering:
     """
@@ -216,4 +237,4 @@ async def generate_response(question:Question):
 
 # if __name__ == "__main__":
 #     uvicorn.run(app, host="0.0.0.0", port=8000)
-#     #print(qa_instance.api_call("kishore poreddy"))
+    #print(qa_instance.api_call("kishore poreddy"))
