@@ -16,3 +16,5 @@ hnswlib
 openai
 selenium
 unstructured
+webdriver_manager
+pysqlite3-binary
