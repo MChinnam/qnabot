@@ -36,7 +36,7 @@ class OpenAQuestionAnswering:
     all_documents = []
     embeddings = None
     chain = None
-    key=os.environ["APPSETTING_OPENAI_API_KEY"]
+    key=os.environ["OPENAI_API_KEY"]
     def __init__(self, urls=None):
         
         """
@@ -48,7 +48,7 @@ class OpenAQuestionAnswering:
         try:
             
             if self.key:
-                logging.info("Successfully initialized OpenAI API Key environment variable")
+                logging.info(f"Successfully initialized OpenAI API Key environment variable:{self.key}")
             else:
                 logging.warning("No API key provided. You should provide a valid API key.: {self.key}")
            
