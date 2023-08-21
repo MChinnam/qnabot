@@ -36,7 +36,7 @@ class OpenAQuestionAnswering:
     all_documents = []
     embeddings = None
     chain = None
-    key=os.environ["OPENAI_API_KEY"]
+    key=os.environ["APPSETTING_OPENAI_API_KEY"]
     def __init__(self, urls=None):
         
         """
