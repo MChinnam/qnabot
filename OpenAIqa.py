@@ -75,7 +75,7 @@ class OpenAQuestionAnswering:
                 self.urls.remove(case_studies_url)
                 case_studies_exists = True
             if len(self.urls)>0:
-                loader = url_selenium.SeleniumURLLoader(urls=self.urls,browser="firefox")
+                loader = url_selenium.SeleniumURLLoader(urls=self.urls)
                 self.all_documents.extend(copy.deepcopy(loader.load()))
             if case_studies_exists:
                 loader = WebBaseLoader(urls=self.urls)
