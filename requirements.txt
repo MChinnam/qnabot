@@ -18,4 +18,4 @@ selenium
 unstructured
 webdriver_manager
 pysqlite3-binary
-chromedriver-binary
+
