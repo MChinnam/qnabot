@@ -139,12 +139,12 @@ class OpenAQuestionAnswering:
             output = json.loads(response)
             if output.get('source_url',"N/A")=="N/A":
                 return "No answer found"
-            #return output["Answer"]
-            default_json['answer']=output['answer']
-            default_json['source_url']=output['source_url']
-            default_json['question']=query
-            default_json['timestamp']=datetime.now().strftime("%m/%d/%YT%H:%M:%S.%f")
-            return default_json
+            return output["Answer"]
+            # default_json['answer']=output['answer']
+            # default_json['source_url']=output['source_url']
+            # default_json['question']=query
+            # default_json['timestamp']=datetime.now().strftime("%m/%d/%YT%H:%M:%S.%f")
+            # return default_json
         
         except Exception as ex:
             logging.error(f"Error while querying the data: {ex}")
